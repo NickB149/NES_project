@@ -1,6 +1,6 @@
 %Run the node_generation script, it must be in the same folder and the
 %foldar must be added to the path
-node_generation;
+NodeGeneration;
 %%
 %Get cluaterheads in range
 N.clustersinrange(:,1)=1;
