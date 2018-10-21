@@ -69,8 +69,8 @@ server.clustersinrange(1)=[];
 for i=1:nc
     distance=norm(cluster(i).pos(:)-server.pos(:));
     if distance<cluster(i).range && distance<server.range
-        cluster(i).pathtoserver=[cluster(i),server];
+        cluster(i).pathtoserver=[i, 0];
     else
-        cluster(i).pathtoserver=[cluster(i),cluster(min(cluster(i).clustersinrange)),cluster(min(cluster(i).clustersinrange)).pathtoserver(2:end)];
+        cluster(i).pathtoserver=[i,cluster(min(cluster(i).clustersinrange)).ID,cluster(min(cluster(i).clustersinrange)).pathtoserver(2:end)];
     end
 end
