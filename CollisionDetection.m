@@ -22,7 +22,7 @@ for j = 1 : nNodes/2
     Comm(j).latency = 0;
     Comm(j).time = 0;
     Comm(j).NB = 0;
-    Comm(j).BE = 0;
+    Comm(j).BE = 3; %setting can vary 0-3 (default:3)
     Comm(j).backoff = 0;
 end
 
@@ -36,7 +36,7 @@ for j = nNodes/2 : nNodes/2+5
     Comm(j).latency = 0;
     Comm(j).time = 0;
     Comm(j).NB = 0;
-    Comm(j).BE = 0;
+    Comm(j).BE = 3; %setting can vary 0-3 (default:3)
     Comm(j).backoff = 0;
 end
 
