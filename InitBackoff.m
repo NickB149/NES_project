@@ -13,12 +13,13 @@ macMaxCSMABackoffs= 4; % 0-5 (default:4)
 %BE=macMinBE; %BE: Backoff Exponent 
 %NB=0; %Number of succesful Backoffs
 for i = 1 : size(Comm,2)
-    if(Comm(i).messageinit == 0) %if the message is just created, so its initalized (%%2. before transmission do a backoff for a random integer number between 0 and 2^BE-1)
-        Comm(i).messageinit = 1
+    if(Comm(i).NB == 0) %if the message is just created, so its initalized (%%2. before transmission do a backoff for a random integer number between 0 and 2^BE-1)
         random=rand();
-        waitingtime= (random*((2^BE)-1)) * aUnitBackoffPeriod
+        waitingtime = (random*((2^(Comm(i).BE))-1) * aUnitBackoffPeriod)
         
         Comm(i).backoff=floor(waitingtime)  % we need to do an initial backoff, regardless of any collision assesement
+        Comm(i).time = Comm(i).backoff
+        Comm(i).latency =  Comm(i).latency + Comm(i).backoff
     end
 end
 %%2. before transmission do a backoff for a random integer number between 0 and 2^BE-1
