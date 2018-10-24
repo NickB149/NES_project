@@ -1,14 +1,17 @@
 %% This code generates the packets in the third scenario from the second iteration onwards
 
-last_gen_time = 0.0;
+%last_gen_time = 0.0;
 
-step_time = 1.0;
-global_time = 3.5;
+step_time = 1.0; %Why?
+%global_time = 3.5;
 
-if (last_gen_time + step_time) >= global_time
+%if (last_gen_time + step_time) >= global_time %I dont think the condition
+%is necessary
     
-    avg_rate = num_customers * 1.5;
-    rate = ceil(random('normal', avg_rate, 1));
+    avg_rate = num_customers * 3.3333e-05; %In objects/milisecond
+    rest = rest+random('raileigh', avg_rate);
+    rate=floor(rest);
+    rest=rest-rate;
     
     num_packets = size(Comm, 2);
     
@@ -16,10 +19,11 @@ if (last_gen_time + step_time) >= global_time
     new_packets_end = num_packets + rate;
     
     for i = new_packets_start : new_packets_end
+        n=randi(8000);
         Comm(i).ID = i;
         Comm(i).type = 'N2S';
-        Comm(i).sender = node(i);
-        Comm(i).receiver = cluster(node(i).clusterID).pathtoserver;
+        Comm(i).sender = node(n));
+        Comm(i).receiver = cluster(node(n).clusterID).pathtoserver;
         Comm(i).collision = [];
         Comm(i).region=[];
 
@@ -29,5 +33,5 @@ if (last_gen_time + step_time) >= global_time
         Comm(i).BE = 0;
         Comm(i).backoff = 0;        
     end   
-    
-end
+    last_gen_time=global_time;
+%end
