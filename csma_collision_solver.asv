@@ -35,12 +35,6 @@ for i = 1 : size(Comm,2)
     if(CCA==1) % meaning chanel free
         %message sent with probbility?
     if(CCA==0) %channels is NOT free
-        BE=min((BE+1), aMaxBE); %New BE value
-        if NB == (macMaxCSMABackoffs+1)
-            %channel acces failure !!!!!! TODO: delete message, => init BE and NB
-            %failure?                                    
-            NB=NB+1;
-        
         
 
 %if CCA failed, so chanel not free:

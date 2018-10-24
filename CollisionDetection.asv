@@ -3,9 +3,7 @@ close all
 clc
 
 %% Generate test input data
-%data from csma collision solver.m I added this line so its possible to run
-%this file seperaty, later when everything is together it can be deleted
-macMinBE=3; %0-3 (default 3)
+%data from csma collision 
 % Create nodes
 nNodes = 10;
 placement = 30;
