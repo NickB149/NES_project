@@ -25,6 +25,11 @@ aUnitBackoffPeriod= 20*16*10^-6; %symbol periods - 2.4ghz is 250 kbps, four data
 aMaxBE=5; %Max BE
 macMaxCSMABackoffs= 4; % 0-5 (default:4)
 
+%Repeat Packet Generation
+rest=0;
+global_time;
+last_gen_time;
+
 %% Generate nodes
 NodeGeneration
 %% Discovery
@@ -33,9 +38,23 @@ DiscoveryService
 %% Generate packets
 choice = PacketGenerationType;
 PacketGeneration
+
+while (exit~=1)
 %% Init Backoff
 InitBackoff
 %% Define Regions
-%Region
+Regions
+
 %% Communincation
 %Communication
+
+%% Fill the time with backoffs
+FillInBackoffs
+
+%% Repeat Packet Generation
+RepeatPacketGeneration
+
+    if (size(Comm,2)==0)
+        exit=1;
+    end
+end

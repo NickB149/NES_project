@@ -1,6 +1,6 @@
 %Run the node_generation script, it must be in the same folder and the
 %folder must be added to the path
-NodeGeneration;
+%NodeGeneration;
 %%
 %Get cluaterheads in range of nodes 
 
