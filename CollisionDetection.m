@@ -65,7 +65,7 @@ for i = 1 : size(Comm,2)
             % Test whether there is a collision
             % If there is a collision, attach ID of sender node that
             % creates this collision
-            if (distance(Comm(i).receiver(1),Comm(j).sender) <= IR)
+            if (distance(Comm(i).receiver(1),Comm(j).sender) <= Comm(j).sender.range)
                 % Check if sender ID is not already in the list
                 if (ismember(Comm(j).sender.ID,Comm(i).collision) == 0)
                     Comm(i).collision = [Comm(i).collision,Comm(j).sender.ID];
