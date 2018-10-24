@@ -11,19 +11,20 @@ if choice ~= 1 && choice ~= 2
 end
 
 % Generate a packet for each node/tag
-% Each packet contains: ID, price and description of the product
+% OLD: Each packet contains: ID, price and description of the product
 % nt = 8000;
+% Each Comm packet is initialized with: 
+%     ID of the packet
+%     type of the message: S2N - Server to Node, N2S - Node to Server
+%     sender of the packet - ID of the server/node
+%     receiver of the packet - entire path (list of IDs) from the server/node to node/server 
+%     other fields are initialized with zero or empty
 if choice == 1
-    Packets = struct('receiverID', {}, 'price', {}, 'desc', {});
     for i = 1 : nt
-%         Packets(i).receiverID = i;
-%         Packets(i).price = randi(60);
-%         description = sprintf('Description of Packet for Node %d', i);
-%         Packets(i).desc = description;
         Comm(i).ID = i;
-        Comm(i).type = 'A';
-        Comm(i).sender = node(i);
-        Comm(i).receiver = [node(i+nNodes/2)];
+        Comm(i).type = 'S2N';
+        Comm(i).sender = server;
+        Comm(i).receiver = [fliplr(cluster(node(i).clusterID).pathtoserver(1:end-1)), i];
         Comm(i).collision = [];
 
         Comm(i).latency = 0;
@@ -33,17 +34,11 @@ if choice == 1
         Comm(i).backoff = 0;
     end
 else
-%     targetNode = randi(8000);
-%     promptText = sprintf('Generating packet for node %d', targetNode);
-%     disp(promptText);
-%     Packet.receiverID = targetNode;
-%     Packet.price = randi(60);
-%     Packet.desc = 'Details of Packet...';
     i = randi(8000);
     Comm(i).ID = i;
-    Comm(i).type = 'A';
-    Comm(i).sender = node(i);
-    Comm(i).receiver = [node(i+nNodes/2)];
+    Comm(i).type = 'S2N';
+    Comm(i).sender = server;
+    Comm(i).receiver = [fliplr(cluster(node(i).clusterID).pathtoserver(1:end-1)), i];
     Comm(i).collision = [];
     
     Comm(i).latency = 0;
@@ -52,3 +47,5 @@ else
     Comm(i).BE = 0;
     Comm(i).backoff = 0;
 end
+
+
