@@ -29,7 +29,7 @@ if choice == 1
         Comm(i).sender = server;
         Comm(i).receiver = [fliplr(cluster(node(i).clusterID).pathtoserver(1:end-1)), i];
         Comm(i).collision = [];
-        Comm(j).region=[];
+        Comm(i).region=[];
         
         Comm(i).latency = 0;
         Comm(i).time = 0;
@@ -39,18 +39,18 @@ if choice == 1
     end
 elseif choice == 2
     i = randi(8000);
-    Comm(i).ID = i;
-    Comm(i).type = 'S2N';
-    Comm(i).sender = server;
-    Comm(i).receiver = [fliplr(cluster(node(i).clusterID).pathtoserver(1:end-1)), i];
-    Comm(i).collision = [];
-    Comm(j).region=[];
+    Comm(0).ID = i;
+    Comm(0).type = 'S2N';
+    Comm(0).sender = server;
+    Comm(0).receiver = [fliplr(cluster(node(i).clusterID).pathtoserver(1:end-1)), i];
+    Comm(0).collision = [];
+    Comm(0).region=[];
     
-    Comm(i).latency = 0;
-    Comm(i).time = 0;
-    Comm(i).NB = 0;
-    Comm(i).BE = 0;
-    Comm(i).backoff = 0;
+    Comm(0).latency = 0;
+    Comm(0).time = 0;
+    Comm(0).NB = 0;
+    Comm(0).BE = 0;
+    Comm(0).backoff = 0;
 else
     num_customers = input('Enter the number of customers: ');
     avg_rate = num_customers * 1.5;
@@ -61,7 +61,7 @@ else
         Comm(i).sender = node(i);
         Comm(i).receiver = cluster(node(i).clusterID).pathtoserver;
         Comm(i).collision = [];
-        Comm(j).region=[];
+        Comm(i).region=[];
 
         Comm(i).latency = 0;
         Comm(i).time = 0;
