@@ -44,7 +44,7 @@ for i = 1 : size(commsToProcess,1)
        if (j ~= i)
            c2 = commsToProcess(j);
            if (distance(Comm(c).receiver(1),Comm(c2).sender) <= Comm(c2).sender.range)
-               hiddenNode = 1
+               %hiddenNode = 1
            end
        end
    end
@@ -58,6 +58,9 @@ for i = 1 : size(commsToProcess,1)
    
 end
 
+successfulComms = flipud(sort(successfulComms));
+
+Comm2 = Comm ;
 %while (size(successfulComms,1) ~= 0)
   %  comm = size(successfulComms,1);
     
@@ -65,6 +68,11 @@ end
   %  successfulComms(comm) = [];
 %end
 
+for j = 1 : size(successfulComms,1)
+    c  = successfulComms(j);
+    Comm2(c) = [];
+    
+end
 function d = distance(n1, n2)
     d = norm(n1.pos - n2.pos);
 end
