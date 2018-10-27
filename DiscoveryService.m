@@ -1,76 +1,65 @@
-%Run the node_generation script, it must be in the same folder and the
-%folder must be added to the path
-%NodeGeneration;
-%%
-%Get cluaterheads in range of nodes 
+%% DiscoveryService
+% Determine which clusterheads are in range of the labels
+% Determine which clusterheads are in range of other clusterheads
+% Determine path from clusterheads to server
 
+%% Get clusterheads in range of nodes 
 for i=1:nt
-    node(i).clustersinrange(1)=1;
+    node(i).clustersinrange=[];
     for j=1:nc
         distance=norm(node(i).pos(:)-cluster(j).pos(:));
         if distance<node(i).range
-            node(i).clustersinrange(node(i).clustersinrange(1)+1)=j;
-            node(i).clustersinrange(1)=node(i).clustersinrange(1)+1;
+            node(i).clustersinrange = [node(i).clustersinrange,j];
         end
     end
 end
 
-
-
-%%
-%Choose one clusterhead at random
+%% Choose one clusterhead at random
 for i=1:nt
-    index=randi([2,node(i).clustersinrange(1)]);
+    index=randi([1,size(node(i).clustersinrange,2)]);
     node(i).clusterID=node(i).clustersinrange(index);
-    node(i).clustersinrange(1)=[];
 end
-%%
-cluster(nc).nodesreg(1)=1;
-for i=1:nc-1
-    cluster(i).nodesreg(1)=1;
-end
-%Clusters get list of assigned nodes
-for i=1:nt
-    cluster(node(i).clusterID).nodesreg(cluster(node(i).clusterID).nodesreg(1)+1)=i;
-    cluster(node(i).clusterID).nodesreg(1)=cluster(node(i).clusterID).nodesreg(1)+1;
-end
-%The following line removes the first column of the matrix, which is used
-%in the previous lines to store the number of tags linked to each
-%clusterhead. If you want to make use of it, comment it.
-for i=1:nc
-    cluster(i).nodesreg(1)=[];
-end
-%%
-%Get clusterheads in range of clusterheads
 
+%% For each clusterhead, create a list of the nodes assigned to it
 for i=1:nc
-    cluster(i).clustersinrange(1)=1;
+    cluster(i).nodesreg = [];
+end
+% Clusters get list of assigned nodes
+for i=1:nt
+    cluster(node(i).clusterID).nodesreg= [cluster(node(i).clusterID).nodesreg(), i];
+end
+
+%% Get clusterheads in range of clusterheads
+for i=1:nc
+    cluster(i).clustersinrange=[];
     for j=1:nc
         distance=norm(cluster(i).pos(:)-cluster(j).pos(:));
         if distance<cluster(i).range && i~=j
-            cluster(i).clustersinrange(cluster(i).clustersinrange(1)+1)=j;
-            cluster(i).clustersinrange(1)=cluster(i).clustersinrange(1)+1;
+            cluster(i).clustersinrange= [cluster(i).clustersinrange,j];
         end
     end
-    
-    cluster(i).clustersinrange(1)=[];
 end
 
-server.clustersinrange(1)=1;
+%% Clusterhead in range of server
+server.clustersinrange=[];
 for j=1:nc
     distance=norm(server.pos(:)-cluster(j).pos(:));
     if distance<server.range
-        server.clustersinrange(server.clustersinrange(1)+1)=j;
-        server.clustersinrange(1)=server.clustersinrange(1)+1;
+        server.clustersinrange=[server.clustersinrange,j];
     end
-end
-server.clustersinrange(1)=[]; 
-%get path to server
+end 
+
+%% Get path to server from any cluster
 for i=1:nc
     distance=norm(cluster(i).pos(:)-server.pos(:));
+    
     if distance<cluster(i).range && distance<server.range
+        % Direct connection to server
         cluster(i).pathtoserver=[i, 0];
     else
-        cluster(i).pathtoserver=[i,cluster(min(cluster(i).clustersinrange)).ID,cluster(min(cluster(i).clustersinrange)).pathtoserver(2:end)];
+        % Connection to server via other clusterheads
+        % ??? This assumes incorrectly that a cluster with lower number is
+        % closer to the server, right?
+        cluster(i).pathtoserver=[i,cluster(min(cluster(i).clustersinrange)).pathtoserver];
     end
 end
