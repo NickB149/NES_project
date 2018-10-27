@@ -11,7 +11,7 @@ clc
 nc=80; %Number of clusterheads
 gridx=10; %Number of clusterheads in X coordinate
 dis=10; %distance between clusterheads 
-nt=800; %Number of tags
+nt=8000; %Number of tags
 
 range_of_clusterheads=25;%in meters
 range_of_nodes=10;%in meters

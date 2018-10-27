@@ -1,71 +1,87 @@
 %% Regions
 % Determine which senders are sending within the range of each other
 
-% Iterate over senders
-for i = 1 : size(Comm,2)
-    % Iterate over senders
-    for j = 1 : size(Comm,2)
-        % Ignore sender when they are the same
-        if (distance(Comm(i).sender,Comm(j).sender) <= Comm(i).sender.range || distance(Comm(i).sender,Comm(j).sender) <= Comm(j).sender.range)
-            % Check if sender ID is not already in the list
-            if (ismember(Comm(j).sender.ID,Comm(i).region) == 0)
-                Comm(i).region = [Comm(i).region,Comm(j).sender.ID];
-            end               
-        end
+%% Create list of the various senders
+senders = Comm(1).sender.ID;
+for i = 2 : size(Comm,2)
+    if (ismember(Comm(i).sender.ID, senders) == 0)
+        senders = [senders, Comm(i).sender.ID];
     end
 end
 
-%% Modify region Column
-%Modify region column so that all the comms that collide in the same
-%region are identified with the same region list
-for i=1:size(Comm,2)
-    Comm(i).region=[Comm(i).sender.ID, Comm(i).region];
-    changed=1;
-    while (changed)
-        currsize=size(Comm(i).region,2);
-        for j=1:size(Comm,2)
-            for k=1:currsize
-                if (ismember(Comm(i).region(k),Comm(j).region))
-                    Comm(i).region=[Comm(i).region,Comm(j).region];
+% Prepare regions array
+regions = -1 * ones(size(senders,2));
+regions(:,1) = senders;
+change = 1;
+
+%% Create region array
+% Iterate over regions list
+while (change == 1)
+    change = 0;
+    for i = 1 : size(regions,2)
+        exit = 0;
+        % Iterate over to be tested region list
+        for k = i : size(regions,2)
+            % Iterate over IDs that are in the same region
+            for j = 1 : size(regions,2)
+                if(regions(i,j) == -1 || exit == 1 || i == k)
+                    break;
                 end
-            end          
-        end
-        Comm(i).region=unique(Comm(i).region);
-        if (size(Comm(i).region)~=currsize)
-            changed=1;
-        else
-            changed=0;
-        end 
-    end
-end
+                % Iterate over to be tested IDs that are in the same region
+                for l = 1 : size(regions,2)
+                    if(regions(k,l) == -1 || exit == 1)
+                        break;
+                    end
 
-%% Define Regions as numbers in the Communication list
-numreg=0;
-regionID(size(Comm,2))=0;
-regions(2,size(Comm,2))=0;
-for i=1:size(Comm,2)
-    if (ismember(Comm(i).region,regions))
-        for j=1:size(regions,1)
-            if (ismember(Comm(i).region,regions(j,:)))
-                regionID(i)=j;
-                break;
+                    d = ID2Distance(regions(i,j),regions(k,l), node, cluster, server, nc);
+                    if (d < ID2Range(regions(i,j), node, cluster, server, nc) || d < ID2Range(regions(k,l), node, cluster, server, nc))
+                       change = 1;
+                        for x = 1 : size(regions,2)
+                           % Find end of correct data
+                           if(regions(i,x) == -1)
+                               y = 1;
+                               x1 = x;
+                               while(regions(k,y) ~= -1)
+                                   regions(i,x1) = regions(k,y); 
+                                   y = y + 1;
+                                   x1 = x1 + 1;
+                               end
+                               regions(k,:) = [-1];
+                               exit = 1;
+                               break;
+                           end
+                       end
+                    end
+                end
             end
         end
-    else
-        regions(numreg+1,:)=[Comm(i).region , zeros(1,size(regions,2)-size(Comm(i).region,2))];
-        numreg=numreg+1;
-        regionID(i)=numreg;
     end
 end
 
+%% Cleanup region array
+index = 1;
+for i = 1 : size(regions,2)
+   if(regions(i) ~= -1* ones(size(regions,2)))
+       newRegions(index,:) = regions(i,:);
+       index= index +1;
+   end
+end
+
+regions = newRegions;
+
+
+%% TODO: Compute region IDs used in Comm.
+for i = 1:size(regions,1)
+    for j = 1 : size(regions,2)
+        
+    end
+end
+
+%{
 for i=1:size(Comm,2)
     Comm(i).region=[];
 end
 for i=1:size(Comm,2)
     Comm(i).region=regionID(i);
 end
-
-% Function that computes the Euclidian distance between two nodes 
-function d = distance(n1, n2)
-    d = norm(n1.pos - n2.pos);
-end
+%}

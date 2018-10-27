@@ -2,11 +2,15 @@
 % Generates and initializes the array of structs about the clusterheads and labels
 
 %% Structs initialization
+global cluster
+global node
+global server
 cluster(nc).ID=nc;
 cluster(nc).type='cluster';
 cluster(nc).pos(3)=0;
 cluster(nc).range=range_of_clusterheads;
 cluster(nc).nodesreg=0;
+
 
 node(nt).ID=nt;
 node(nt).type='node';
@@ -43,11 +47,12 @@ end
 %% Node generator with no cluster dependency
 for i=1:nt
     node(i).type='node';
-    node(i).ID=i;
+    node(i).ID=nc+i;
     node(i).pos=[gridx*dis*rand(1), gridy*dis*rand(1), 2*rand(1)];
 end
 
 %% Server node
+
 cluster(nc+1).pos=[0,0,1];
 cluster(nc+1).range=range_of_server;
 cluster(nc+1).type='server';
