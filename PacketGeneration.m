@@ -1,3 +1,4 @@
+%% Packet Generation
 % Generate a packet for each node/tag
 % OLD: Each packet contains: ID, price and description of the product
 % nt = 8000;
@@ -21,9 +22,10 @@ if PacketGenerationType == 1
         Comm(i).latency = 0;
         Comm(i).time = 0;
         Comm(i).NB = 0;
-        Comm(i).BE = 0;
+        Comm(i).BE = macMinBE;
         Comm(i).backoff = 0;
     end
+    
 % A single label is updated
 elseif PacketGenerationType == 2
     i = randi(8000);
@@ -37,8 +39,9 @@ elseif PacketGenerationType == 2
     Comm(1).latency = 0;
     Comm(1).time = 0;
     Comm(1).NB = 0;
-    Comm(1).BE = 0;
+    Comm(1).BE = macMinBE;
     Comm(1).backoff = 0;
+    
 % Packets generated based on amount of customers
 else
     avg_rate = num_customers * 1.5; %Iñaki: I think its wat too much everyclient taking 1.5 objects per milisecond, I made a change on the RepeatPacketGeneration.m
@@ -55,13 +58,7 @@ else
         Comm(i).latency = 0;
         Comm(i).time = 0;
         Comm(i).NB = 0;
-        Comm(i).BE = 0;
+        Comm(i).BE = macMinBE;
         Comm(i).backoff = 0;
-
     end    
 end
-
-
-
-
-
