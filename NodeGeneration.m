@@ -1,18 +1,7 @@
-%clear all
-%close all
-%clc
-%%
-% %Parameters for the generation
-% nc=80; %Number of clusterheads
-% gridx=10; %Number of clusterheads in X coordinate
-% dis=10; %distance between clusterheads 
-% nt=8000; %Number of tags
-% 
-% range_of_clusterheads=25;%in meters
-% range_of_nodes=10;%in meters
-% range_of_server=50;%in meters
-%%
-%Structs initialization
+%% Node Generation
+% Generates and initializes the array of structs about the clusterheads and labels
+
+%% Structs initialization
 cluster(nc).ID=nc;
 cluster(nc).type='cluster';
 cluster(nc).pos(3)=0;
@@ -26,16 +15,16 @@ node(nt).range=range_of_nodes;
 node(nt).clustersinrange=0;
 node(nt).clusterID=0;
 
-%%
-%Ranges
+%% Ranges
 for i=1:nc
     cluster(i).range=random('normal',range_of_clusterheads,1);
 end
 for i=1:nt
     node(i).range=random('normal',range_of_nodes,0.2);
 end
-%%
-%Clusterheads generation
+
+%% Clusterheads generation
+% Distribute clusterheads evenly among the entire area
 gridy=nc/gridx;
 z=3;
 x=dis/2;
@@ -51,15 +40,14 @@ for i=1:gridx
     x=x+dis;
 end
 
-%%
-%Node generator with no cluster dependency
+%% Node generator with no cluster dependency
 for i=1:nt
     node(i).type='node';
     node(i).ID=i;
     node(i).pos=[gridx*dis*rand(1), gridy*dis*rand(1), 2*rand(1)];
 end
-%%
-%Server node
+
+%% Server node
 cluster(nc+1).pos=[0,0,1];
 cluster(nc+1).range=range_of_server;
 cluster(nc+1).type='server';
@@ -69,8 +57,8 @@ cluster(nc+1).clustersinrange=[];
 cluster(nc+1).ID=0;
 server=cluster(nc+1);
 cluster(nc+1)=[];
-%%
-%Plot everything - takes forever with the array of structs approach
+
+%% Plot everything - takes forever with the array of structs approach
 %PlotPositions;
     
 
