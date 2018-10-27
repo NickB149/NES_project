@@ -16,6 +16,7 @@ change = 1;
 
 %% Create region array
 % Iterate over regions list
+% Repeat untill regions matrix doesn't change anymore
 while (change == 1)
     change = 0;
     for i = 1 : size(regions,2)
@@ -32,10 +33,13 @@ while (change == 1)
                     if(regions(k,l) == -1 || exit == 1)
                         break;
                     end
-
+                    
+                    % Compute distance between two senders
                     d = ID2Distance(regions(i,j),regions(k,l), node, cluster, server, nc);
                     if (d < ID2Range(regions(i,j), node, cluster, server, nc) || d < ID2Range(regions(k,l), node, cluster, server, nc))
-                       change = 1;
+                        change = 1;
+                        % Combine the two regions, because they are in each
+                        % others range
                         for x = 1 : size(regions,2)
                            % Find end of correct data
                            if(regions(i,x) == -1)
@@ -46,7 +50,7 @@ while (change == 1)
                                    y = y + 1;
                                    x1 = x1 + 1;
                                end
-                               regions(k,:) = [-1];
+                               regions(k,:) = -1;
                                exit = 1;
                                break;
                            end
@@ -69,19 +73,11 @@ end
 
 regions = newRegions;
 
-
-%% TODO: Compute region IDs used in Comm.
-for i = 1:size(regions,1)
-    for j = 1 : size(regions,2)
-        
-    end
+%% Compute region IDs used in Comm to be able to index regions from Comm.region
+for i = 1:size(Comm,2)
+   for j = 1:size(regions,1)
+       if(ismember(Comm(i).sender.ID,regions(j,:)))
+           Comm(i).region = j;
+       end
+   end
 end
-
-%{
-for i=1:size(Comm,2)
-    Comm(i).region=[];
-end
-for i=1:size(Comm,2)
-    Comm(i).region=regionID(i);
-end
-%}
