@@ -37,6 +37,9 @@ global_time = 0;
 last_gen_time = 0;
 total_time = 1000; % How long the script runs
 
+% Comm
+commFailProb = 0.3;
+
 %% Generate nodes
 NodeGeneration
 %% Discovery
@@ -56,7 +59,7 @@ while (1)
     %% Define Regions
     Regions
     %% Communincation
-    %Communication
+    Comm
     %% Fill the time with backoffs
     FillInBackoffs
     
@@ -73,5 +76,4 @@ while (1)
             return
         end
     end
-    
 end

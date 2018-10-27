@@ -1,20 +1,11 @@
-%clear all
-%close all
-%clc
-
-commFailProb = 0.3;
+%% Communication
 
 %Find no of Regions
-nRegions = 0;
-for i = 1 : size(Comm,2)
-    if (Comm(i).region > nRegions)
-        nRegions  = Comm(i).region ;
-    end
-end
-
+nRegions = size(regions,1);
 
 commsToProcess = [];
-%Find comm with min time in each region
+
+%% Find comm with min time in each region
 for i = 1 : nRegions
    time = 0;
    comm = -1;
@@ -22,18 +13,17 @@ for i = 1 : nRegions
        if (Comm(j).region == i)
            if (Comm(j).time <= time)
                comm = j;
-               time = Comm(j).time;
-               
+               time = Comm(j).time;             
            end
        end
-       
    end
    commsToProcess = [commsToProcess ; comm];
 end
 
+%% Process one communication in each region and check for hidden nodes
+% then find which nodes can successfully communicate based on probablity
 successfulComms = [];
-%Process one communication in each region and check for hidden nodes then
-%find which nodes can successfully communicate based on probablity
+
 for i = 1 : size(commsToProcess,1)
    c = commsToProcess(i);
    %sender = Comm(c).sender;
@@ -61,6 +51,7 @@ end
 successfulComms = flipud(sort(successfulComms));
 
 Comm2 = Comm ;
+
 %while (size(successfulComms,1) ~= 0)
   %  comm = size(successfulComms,1);
     
@@ -72,7 +63,4 @@ for j = 1 : size(successfulComms,1)
     c  = successfulComms(j);
     Comm2(c) = [];
     
-end
-function d = distance(n1, n2)
-    d = norm(n1.pos - n2.pos);
 end
