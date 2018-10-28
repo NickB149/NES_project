@@ -37,8 +37,8 @@ for i = 1 : size(commsToProcess,1)
    for j = 1 : size(commsToProcess,1)
        if (j ~= i)
            c2 = commsToProcess(j);
-           if (distance(Comm(c).receiver(1),Comm(c2).sender) <= Comm(c2).sender.range)
-               hiddenNode = 1;
+           if (ID2Distance(Comm(c).receiver(1),Comm(c2).sender.ID, node, cluster, server, nc) <= Comm(c2).sender.range)
+                   hiddenNode = 1;
            end
        end
    end

@@ -16,7 +16,7 @@
     new_packets_end = num_packets + rate;
     
     for i = new_packets_start : new_packets_end
-        n=randi(8000);
+        n=randi(nt);
         Comm(i).ID = i;
         Comm(i).type = 'N2S';
         Comm(i).sender = node(n);

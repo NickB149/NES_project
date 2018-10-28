@@ -28,7 +28,7 @@ if PacketGenerationType == 1
     
 % A single label is updated
 elseif PacketGenerationType == 2
-    i = randi(8000);
+    i = randi(nt);
     Comm(1).ID = i;
     Comm(1).type = 'S2N';
     Comm(1).sender = server;
@@ -50,7 +50,7 @@ else
     rest=rest-rate;
     Comm = [];
     for i = 1 : rate
-        n=randi(8000);
+        n=randi(nt);
         Comm(i).ID = i;
         Comm(i).type = 'N2S';
         Comm(i).sender = node(n);

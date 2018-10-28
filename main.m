@@ -11,7 +11,7 @@ clc
 nc=80; %Number of clusterheads
 gridx=10; %Number of clusterheads in X coordinate
 dis=10; %distance between clusterheads 
-nt=8000; %Number of tags
+nt=100; %Number of tags
 
 range_of_clusterheads=25;%in meters
 range_of_nodes=10;%in meters
@@ -82,5 +82,4 @@ while (1)
                 return
             end
         end
-    time_goal
 end
