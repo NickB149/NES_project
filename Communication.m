@@ -91,5 +91,5 @@ for j = 1 : size(successfulComms,1)
     end    
 end
 
-commTime = max(timeList);
+time_goal = max(timeList);
 Comm = Comm2;
