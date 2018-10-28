@@ -30,7 +30,7 @@ step_time = 1.0; %Why?
         Comm(i).latency = 0;
         Comm(i).time = global_time;
         Comm(i).NB = 0;
-        Comm(i).BE = 0;
+        Comm(i).BE = macMinBE;
         Comm(i).backoff = 0;        
     end   
     last_gen_time=global_time;
