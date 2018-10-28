@@ -52,7 +52,8 @@ for i = 1 : size(commsToProcess,1)
    
 end
 
-successfulComms = flipud(sort(successfulComms));
+successfulComms = flipud(sort(successfulComms))
+timeList = [];
 
 for j = 1 : size(successfulComms,1)   
     
@@ -67,6 +68,7 @@ for j = 1 : size(successfulComms,1)
             commTime = N2Stime;
         end
         Comm(c).time = Comm(c).time + commTime;
+        timeList = [timeList Comm(c).time];
     end    
 end
 
@@ -83,9 +85,11 @@ for j = 1 : size(successfulComms,1)
             commTime = N2Stime;
         end
         Comm(c).time = Comm(c).time + commTime;
+        timeList = [timeList Comm(c).time];
         completedComms = [completedComms Comm(c)];
         Comm2(c) = [];
     end    
 end
 
+commTime = max(timeList);
 Comm = Comm2;
