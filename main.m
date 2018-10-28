@@ -27,7 +27,7 @@ end
 
 % Init Backoff
 macMinBE=3; %0-3 (default 3)
-aUnitBackoffPeriod= 20*16*10^-6; %symbol periods - 2.4ghz is 250 kbps, four data bits transfered each period => 16 microsecond / symbol
+aUnitBackoffPeriod= (20*16*10^-6)*10^3; %symbol periods - 2.4ghz is 250 kbps, four data bits transfered each period => 16 microsecond / symbol. The times 10^3 makes this value [ms] ! from [s]
 aMaxBE=5; %Max BE
 macMaxCSMABackoffs= 4; % 0-5 (default:4)
 

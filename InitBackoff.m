@@ -8,7 +8,7 @@ for i = 1 : size(Comm,2)
         waitingtime = (random*((2^(Comm(i).BE))-1) * aUnitBackoffPeriod);
         
         Comm(i).backoff = waitingtime;
-        Comm(i).time = Comm(i).backoff;
+        Comm(i).time = Comm(i).time + Comm(i).backoff;
         Comm(i).latency = Comm(i).latency + Comm(i).backoff;
     end
 end
