@@ -1,5 +1,9 @@
 %% Communication
 
+S2Ntime = 4.8;
+
+N2Stime = 1.28 ;
+
 %Find no of Regions
 nRegions = size(regions,1);
 
@@ -7,7 +11,7 @@ commsToProcess = [];
 
 %% Find comm with min time in each region
 for i = 1 : nRegions
-   time = 0;
+   time = 10000000000000000000000000000;
    comm = -1;
    for j = 1 : size(Comm,2)
        if (Comm(j).region == i)
@@ -34,7 +38,7 @@ for i = 1 : size(commsToProcess,1)
        if (j ~= i)
            c2 = commsToProcess(j);
            if (distance(Comm(c).receiver(1),Comm(c2).sender) <= Comm(c2).sender.range)
-               %hiddenNode = 1
+               hiddenNode = 1;
            end
        end
    end
@@ -50,17 +54,38 @@ end
 
 successfulComms = flipud(sort(successfulComms));
 
+for j = 1 : size(successfulComms,1)   
+    
+    c  = successfulComms(j);
+    if ( size(Comm(c).receiver,2) > 1 )
+        Comm(c).sender  = Comm(c).receiver(1);
+        Comm(c).receiver(1) = [];
+        commTime = 0;
+        if (Comm(c).type == 'S2N')
+            commTime = S2Ntime;
+        else
+            commTime = N2Stime;
+        end
+        Comm(c).time = Comm(c).time + commTime;
+    end    
+end
+
 Comm2 = Comm ;
 
-%while (size(successfulComms,1) ~= 0)
-  %  comm = size(successfulComms,1);
+for j = 1 : size(successfulComms,1)   
     
-  %  Comm(comm) = [];
-  %  successfulComms(comm) = [];
-%end
-
-for j = 1 : size(successfulComms,1)
     c  = successfulComms(j);
-    Comm2(c) = [];
-    
+    if ( size(Comm(c).receiver,2) == 1 )
+        commTime = 0;
+        if (Comm(c).type == 'S2N')
+            commTime = S2Ntime;
+        else
+            commTime = N2Stime;
+        end
+        Comm(c).time = Comm(c).time + commTime;
+        completedComms = [completedComms Comm(c)];
+        Comm2(c) = [];
+    end    
 end
+
+Comm = Comm2;
