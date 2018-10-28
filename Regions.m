@@ -63,15 +63,14 @@ while (change == 1)
 end
 
 %% Cleanup region array
-index = 1;
+%index = 1;
 for i = 1 : size(regions,2)
-   if(regions(i) ~= -1* ones(size(regions,2)))
-       newRegions(index,:) = regions(i,:);
-       index= index +1;
+   if(regions(i) == -1* ones(size(regions,2)))
+       regions(i)=[];
    end
 end
 
-regions = newRegions;
+%regions = newRegions;
 
 %% Compute region IDs used in Comm to be able to index regions from Comm.region
 for i = 1:size(Comm,2)

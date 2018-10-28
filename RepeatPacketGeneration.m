@@ -1,18 +1,15 @@
 %% This code generates the packets in the third scenario from the second iteration onwards
 
-%last_gen_time = 0.0;
 
-step_time = 1.0; %Why?
-%global_time = 3.5;
 
 %if (last_gen_time + step_time) >= global_time %I dont think the condition
 %is necessary
     
-    avg_rate = num_customers * 3.3333e-05; %In objects/milisecond
-    rest = rest+random('raileigh', avg_rate);
-    rate=floor(rest);
-    rest=rest-rate;
-    
+   rate = num_customers * 3.3333e-05 * (time_goal-previous_time_goal); %In people * packets/(people* milisecond) * milisecons = packets
+    %rest = rest+random('Rayleigh', avg_rate);
+    rate=floor(rate);
+    %rest=rest-rate;
+    if (rate~=0)
     num_packets = size(Comm, 2);
     
     new_packets_start = num_packets + 1;
@@ -28,10 +25,12 @@ step_time = 1.0; %Why?
         Comm(i).region=[];
 
         Comm(i).latency = 0;
-        Comm(i).time = global_time;
+        Comm(i).time = time_goal;
         Comm(i).NB = 0;
         Comm(i).BE = macMinBE;
         Comm(i).backoff = 0;        
     end   
-    last_gen_time=global_time;
+    
+        previous_time_goal=time_goal;
+    end
 %end

@@ -19,7 +19,7 @@ range_of_server=50;%in meters
 
 % Discovery
 % Type of packets generated (1: all labels are updated, 2: single label is updated, 3: Customer based) 
-PacketGenerationType = 1; 
+PacketGenerationType = 3; 
 num_customers = 0;
 if(PacketGenerationType == 3 && num_customers == 0) 
     num_customers = input('Enter the number of customers: ');
@@ -35,7 +35,8 @@ macMaxCSMABackoffs= 4; % 0-5 (default:4)
 rest=0;
 global_time = 0;
 last_gen_time = 0;
-total_time = 1000; % How long the script runs
+total_time = 100e3; % How long the script runs
+previous_time_goal=0;
 
 % Comm
 commFailProb = 0.3;
@@ -56,26 +57,30 @@ PacketGeneration
 
 %% Communication loop
 while (1)
-    %% Init Backoff
-    InitBackoff
-    %% Define Regions
-    Regions
-    %% Communincation
-    Communication
-    %% Fill the time with backoffs
-    FillInBackoffs
-    
-    %% Repeat Packet Generation if it specified by the amount of customers present 
-    if (PacketGenerationType == 3)
-        RepeatPacketGeneration
-        if (global_time >= total_time)
-            disp('Script finished, timer ran out');
-            return
-        end
-    else % PacketGenerationType = {1,2}
-        if (size(Comm,2)==0)
-            disp('Script finished, Communication list is empty.');
-            return
-        end
+    if (size(Comm,2)~=0)
+        %% Init Backoff
+        InitBackoff
+        %% Define Regions
+        Regions
+        %% Communincation
+        Communication
+        %% Fill the time with backoffs
+        FillInBackoffs
+    else
+        time_goal=time_goal+10;
     end
+        %% Repeat Packet Generation if it specified by the amount of customers present 
+        if (PacketGenerationType == 3)
+            RepeatPacketGeneration
+            if (time_goal >= total_time)
+                disp('Script finished, timer ran out');
+                return
+            end
+        else % PacketGenerationType = {1,2}
+            if (size(Comm,2)==0)
+                disp('Script finished, Communication list is empty.');
+                return
+            end
+        end
+    time_goal
 end

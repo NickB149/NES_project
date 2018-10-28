@@ -11,8 +11,8 @@ for i = 1 : size(Comm,2) %iterate over the list
             Comm(i).NB = Comm(i).NB + 1; %add a backoff to this message
             Comm(i).BE=min( (Comm(i).BE+1), aMaxBE); %add BE value
         
-            random=rand(); %get random 
-            waitingtime = (random*((2^(Comm(i).BE))-1) * aUnitBackoffPeriod); %calculate backofftime
+            random_value=rand(); %get random 
+            waitingtime = (random_value*((2^(Comm(i).BE))-1) * aUnitBackoffPeriod); %calculate backofftime
             Comm(i).backoff = waitingtime; %update the backoff time
             Comm(i).time = Comm(i).time + Comm(i).backoff;  % update the messages current time
             Comm(i).latency = Comm(i).latency + Comm(i).backoff; %add it to latency as well

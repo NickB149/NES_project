@@ -44,8 +44,11 @@ elseif PacketGenerationType == 2
     
 % Packets generated based on amount of customers
 else
-    avg_rate = num_customers * 1.5; %Iñaki: I think its wat too much everyclient taking 1.5 objects per milisecond, I made a change on the RepeatPacketGeneration.m
-    rate = ceil(random('normal', avg_rate, 1));
+    avg_rate = num_customers * 3.3333e-05; %In objects/milisecond
+    rest = rest+random('Rayleigh', avg_rate);
+    rate=floor(rest);
+    rest=rest-rate;
+    Comm = [];
     for i = 1 : rate
         n=randi(8000);
         Comm(i).ID = i;
