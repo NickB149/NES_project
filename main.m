@@ -39,6 +39,8 @@ total_time = 1000; % How long the script runs
 
 % Comm
 commFailProb = 0.3;
+completedComms = [];
+commTime = 0;
 
 %% Generate nodes
 NodeGeneration
