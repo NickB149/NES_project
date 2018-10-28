@@ -59,7 +59,7 @@ for j = 1 : size(successfulComms,1)
     
     c  = successfulComms(j);
     if ( size(Comm(c).receiver,2) > 1 )
-        Comm(c).sender  = Comm(c).receiver(1);
+        Comm(c).sender  = cluster(Comm(c).receiver(1));
         Comm(c).receiver(1) = [];
         commTime = 0;
         if (Comm(c).type == 'S2N')
