@@ -27,13 +27,21 @@ end
 %% Process one communication in each region and check for hidden nodes
 % then find which nodes can successfully communicate based on probablity
 successfulComms = [];
-
+timeList = [];
 for i = 1 : size(commsToProcess,1)
    c = commsToProcess(i);
    %sender = Comm(c).sender;
    receiver = Comm(c).receiver;
    hiddenNode = 0;
-   
+   commTime = 0;
+    if (Comm(i).type == 'S2N')
+        commTime = S2Ntime;
+    else
+        commTime = N2Stime;
+    end
+    Comm(i).time = Comm(c).time + commTime;
+    Comm(i).latency = Comm(c).latency + commTime;
+    timeList = [timeList Comm(c).time];
    for j = 1 : size(commsToProcess,1)
        if (j ~= i)
            c2 = commsToProcess(j);
@@ -53,7 +61,7 @@ for i = 1 : size(commsToProcess,1)
 end
 
 successfulComms = flipud(sort(successfulComms));
-timeList = [];
+% timeList = [];
 
 for j = 1 : size(successfulComms,1)   
     
@@ -61,15 +69,15 @@ for j = 1 : size(successfulComms,1)
     if ( size(Comm(c).receiver,2) > 1 )
         Comm(c).sender  = cluster(Comm(c).receiver(1));
         Comm(c).receiver(1) = [];
-        commTime = 0;
-        if (Comm(c).type == 'S2N')
-            commTime = S2Ntime;
-        else
-            commTime = N2Stime;
-        end
-        Comm(c).time = Comm(c).time + commTime;
-        Comm(c).latency = Comm(c).latency + commTime;
-        timeList = [timeList Comm(c).time];
+%         commTime = 0;
+%         if (Comm(c).type == 'S2N')
+%             commTime = S2Ntime;
+%         else
+%             commTime = N2Stime;
+%         end
+%         Comm(c).time = Comm(c).time + commTime;
+%         Comm(c).latency = Comm(c).latency + commTime;
+%         timeList = [timeList Comm(c).time];
     end    
 end
 
@@ -92,6 +100,7 @@ for j = 1 : size(successfulComms,1)
         Comm2(c) = [];
     end    
 end
-
-time_goal = max(timeList);
+if (size(timeList)~=0)
+    time_goal = max(timeList);
+end
 Comm = Comm2;
