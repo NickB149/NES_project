@@ -59,11 +59,8 @@ while (1)
             RepeatPacketGeneration
             if (time_goal >= sim_time)
                 disp('Script finished, timer ran out');
-                if (size(completedComms,2)~=0)
-                    app.worst_latency=completedComms(size(completedComms,2)).latency;
-                else
-                    app.worst_latency=0;
-                end
+                app.comm_list=completedComms;
+                app.pending=size(Comm,2);
                 return
             end
         else % PacketGenerationType = {1,2}

@@ -68,7 +68,7 @@ while (1)
         else % PacketGenerationType = {1,2}
             if (size(Comm,2)==0)
                 disp('Script finished, Communication list is empty.');
-                app.worst_latency=completedComms(size(completedComms,2)).latency;
+                app.comm_list=completedComms;
                 return
             end
         end
