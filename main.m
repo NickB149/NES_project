@@ -39,8 +39,8 @@ total_time = 100e3; % How long the script runs
 previous_time_goal=0;
 
 % Comm
-commFailProb = 0.3;
-completedComms = [];
+commFailProb = 0.3;  % Probability that an attempted communication will fail
+completedComms = []; 
 time_goal = 0;
 
 %% Generate nodes

@@ -1,4 +1,4 @@
-% Convert ID to distance
+% Convert ID to Range
 function r = ID2Range(id, node, cluster, server, nc)
     if (id == 0)
         r = server(1).range;

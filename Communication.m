@@ -63,6 +63,11 @@ end
 successfulComms = flipud(sort(successfulComms));
 % timeList = [];
 
+
+% If The communication is successfulan the last receiver node has NOT been
+% reached, the sender and receiver will be updated for next stage of the
+% communication.
+
 for j = 1 : size(successfulComms,1)   
     
     c  = successfulComms(j);
@@ -83,6 +88,9 @@ end
 
 Comm2 = Comm ;
 
+
+% If the last receiver node is reached in the communication, the
+% communication will be deleted from Comm and added to completedComms
 for j = 1 : size(successfulComms,1)   
     
     c  = successfulComms(j);
@@ -100,6 +108,10 @@ for j = 1 : size(successfulComms,1)
         Comm2(c) = [];
     end    
 end
+
+%%Find the ending timestamp of the succesful communication that finished
+%%the last.
+
 if (size(timeList)~=0)
     time_goal = max(timeList);
 end

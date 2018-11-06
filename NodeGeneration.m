@@ -2,6 +2,8 @@
 % Generates and initializes the array of structs about the clusterheads and labels
 
 %% Structs initialization
+% Clusters will have the properties - cluster ID, type identifier, range,
+% position and nodes registered to it
 global cluster
 global node
 global server
@@ -11,7 +13,8 @@ cluster(nc).pos(3)=0;
 cluster(nc).range=range_of_clusterheads;
 cluster(nc).nodesreg=0;
 
-
+%Nodes will have the properties - Node ID, type identifier, position,
+%range, ID of head cluster and no of clusters in range
 node(nt).ID=nt;
 node(nt).type='node';
 node(nt).pos(3)=0;
@@ -20,6 +23,9 @@ node(nt).clustersinrange=0;
 node(nt).clusterID=0;
 
 %% Ranges
+% To simulate real products, the range of all clusterheads and nodes will
+% not be an exact value. Rather their ranges will be normally distributed
+% with a mean value and standard deviation
 for i=1:nc
     cluster(i).range=random('normal',range_of_clusterheads,1);
 end
@@ -52,6 +58,8 @@ for i=1:nt
 end
 
 %% Server node
+%Only one server node which will be the PAN coordinator of the tree
+%structure
 
 cluster(nc+1).pos=[0,0,1];
 cluster(nc+1).range=range_of_server;
